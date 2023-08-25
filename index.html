@@ -1,0 +1,39 @@
+{% extends 'expense_app/base.html' %} 
+
+
+{% block content %} 
+
+<form method="post" class="form">
+    {% csrf_token %}
+    <div class="title">Welcome</div>
+    <div class="subtitle">Let's track our expenses!</div>
+
+    <div class="input-container ic1">
+       
+            {{ expense_form.name }}
+            <div class="cut"></div>
+            <label for="fullname" class="placeholder">Full Name</label>
+        
+    </div>
+
+    <div class="input-container ic2">
+
+            {{ expense_form.amount }} 
+
+            <label for="amount" class="placeholder">Amount</label>
+    </div>
+
+    <div class="input-container ic2">
+             
+            {{ expense_form.category }}
+            <div class="cut"></div>
+            <label for="category" class="placeholder">Category</label>
+
+    </div>
+    
+    <button type="submit" class="submit">Submit</button>
+    <a href="{% url 'expense' %}" class="submit">Show Expenses</a>
+
+</form>
+
+{% endblock %}

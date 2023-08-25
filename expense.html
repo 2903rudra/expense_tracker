@@ -1,0 +1,112 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+</head>
+<body>
+    <div class="container">
+
+        <h1>Expense</h1>
+
+        <table>
+            <tr>
+                <th>Full Name</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
+
+            </tr>
+        {% for i in expenses %}
+
+        <tr>
+        <td>{{ i.name }}</td>
+        <td>{{ i.amount | intcomma }}</td>
+        <td>{{ i.category }}</td>
+        <td>{{ i.date }}</td>
+        <td><a href="{% url 'edit' i.id %}"><img style="height: 35px; width: 35px;" src="{% static 'expenseapp/images/edit.png' %}" alt=""></a></td>
+        <td>
+            <form method = "POST" action="{% url 'delete' i.id %}">
+                {% csrf_token %} 
+                <button type="submit"><img style="height: 35px; width: 35px;" src="{% static 'expenseapp/images/delete.png' %}" alt=""></button>
+            </form>
+        </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td>Total : {{ total_expenses.amount__sum | intcomma }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+    <a href="{% url 'index' %}" class="submit">Add New Expense</a>
+    </div>
+
+    <div class="flex">
+        <div class="box">
+            <h2>Last 365 DAYS</h2>
+            <p> {{ yearly_sum.amount__sum | intcomma }}</p>
+        </div>
+        <div class="box">
+            <h2>Last 30 Days</h2>
+            <p> {{ monthly_sum.amount__sum | intcomma }}</p>
+        </div>
+        <div class="box">
+            <h2>Last 7 days</h2>
+            <p>{{ weekly_sum.amount__sum | intcomma }}</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Daily Sums</h1>
+        <table>
+            <tr>
+                <th>Daily sum date</th>
+                <th>Amount</th>
+            </tr>
+        
+        {% for i in daily_sums %}
+
+        <tr>
+            <td> {{ i.date }}</td>
+            <td>{{ i.amount__sum | intcomma }}</td>
+        </tr>
+       
+        
+        {% endfor %}
+    </table>
+    </div>
+
+    <div class="container">
+        <h1>Expense by Category</h1>
+
+        <table>
+
+            <tr><th>Category</th>
+                <th>Amount</th>
+
+
+            </tr>
+            {% for i in categorical_sums %} 
+            <tr>
+                <td>{{ i.category }}</td>
+                <td>{{ i.amount__sum|intcomma }}</td>
+            </tr>
+
+            {% endfor %}
+            
+        </table>
+    </div>
+</body>
+</html>
